@@ -1,19 +1,187 @@
+---
+const navLinks = [
+  { href: '#inicio', label: 'Inicio' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#timeline', label: 'Timeline' },
+  { href: '#certificados', label: 'Certificados' },
+  { href: '#redes', label: 'Contacto' },
+]
+---
+
 <header
-    class="bg-black/20  text-white z-50 fixed top-0 h-[51px] lg:h-[60px] w-full flex items-center justify-between"
+  id="main-nav"
+  class="fixed top-0 w-full z-[55] h-[51px] lg:h-[60px] flex items-center justify-between px-5 lg:px-8 transition-all duration-500 ease-out"
 >
-    <div
-        class="flex items-center basis-1/3 justify-center text-center h-full"
-    >
-    </div>
+  <div class="flex items-center">
+    <a href="#inicio" class="text-white font-bold text-lg tracking-tight">
+      <img src="/favicon.svg" class="w-6 h-6" alt="Logo">
+    </a>
+  </div>
 
-    <div class="w-fit  basis-1/3 lg:w-fit lg:basis-0">
-        <div class="z-50">
-            
-        </div>
-    </div>
+  <nav class="hidden md:flex items-center gap-6" id="nav-links">
+    {navLinks.map(link => (
+      <a
+        href={link.href}
+        class="text-sm text-white/50 hover:text-white transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-sky-400 after:transition-all after:duration-300 hover:after:w-full"
+        data-nav-link
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
 
-    <div
-        class="flex basis-1/3  items-center justify-around  text-center h-full"
-    >
-    </div>
+  <!-- Hamburger button -->
+  <button
+    class="md:hidden relative w-8 h-8 flex items-center justify-center"
+    id="hamburger-btn"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+  >
+    <span class="hamburger-line top-[9px]" data-bar-1></span>
+    <span class="hamburger-line top-[15px]" data-bar-2></span>
+    <span class="hamburger-line top-[21px]" data-bar-3></span>
+  </button>
 </header>
+
+<!-- Mobile menu overlay -->
+<div
+  id="mobile-overlay"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+></div>
+
+<!-- Mobile menu panel -->
+<div
+  id="mobile-menu"
+  class="fixed top-0 right-0 h-full w-[280px] z-50 translate-x-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden"
+>
+  <div class="h-full backdrop-blur-xl border-l border-white/10 pt-20 px-6 flex flex-col">
+    <nav class="flex flex-col gap-1">
+      {navLinks.map((link, i) => (
+        <a
+          href={link.href}
+          class="mobile-nav-link text-white/60 hover:text-white text-lg py-3 px-4 rounded-lg hover:bg-white/5 transition-all duration-200 translate-x-8 opacity-0"
+          data-nav-link
+          style={`transition-delay: ${50 + i * 40}ms`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="mt-auto pb-8 pt-6 border-t border-white/10">
+      <p class="text-white/30 text-xs">© {new Date().getFullYear()} Maximo Figuera</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hamburger-line {
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .menu-open [data-bar-1] {
+    top: 15px;
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .menu-open [data-bar-2] {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0);
+  }
+  .menu-open [data-bar-3] {
+    top: 15px;
+    transform: translateX(-50%) rotate(-45deg);
+  }
+
+  .menu-visible .mobile-nav-link {
+    transform: translateX(0);
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('main-nav')!
+  const mobileMenu = document.getElementById('mobile-menu')!
+  const overlay = document.getElementById('mobile-overlay')!
+  const hamburger = document.getElementById('hamburger-btn')!
+  let menuOpen = false
+
+  // Scroll-aware header: transparent → blue blur → transparent
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('nav-scrolled')
+    } else {
+      nav.classList.remove('nav-scrolled')
+    }
+  }, { passive: true })
+
+  // Toggle mobile menu
+  function toggleMenu() {
+    menuOpen = !menuOpen
+    hamburger.setAttribute('aria-expanded', String(menuOpen))
+
+    if (menuOpen) {
+      hamburger.classList.add('menu-open')
+      mobileMenu.classList.remove('translate-x-full')
+      overlay.classList.remove('opacity-0', 'pointer-events-none')
+      overlay.classList.add('opacity-100')
+      document.body.style.overflow = 'hidden'
+      // Stagger link animations
+      requestAnimationFrame(() => mobileMenu.classList.add('menu-visible'))
+    } else {
+      hamburger.classList.remove('menu-open')
+      mobileMenu.classList.add('translate-x-full')
+      mobileMenu.classList.remove('menu-visible')
+      overlay.classList.add('opacity-0', 'pointer-events-none')
+      overlay.classList.remove('opacity-100')
+      document.body.style.overflow = ''
+    }
+  }
+
+  hamburger.addEventListener('click', toggleMenu)
+  overlay.addEventListener('click', toggleMenu)
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (menuOpen) toggleMenu()
+    })
+  })
+
+  // Active section observer
+  const sections = document.querySelectorAll<HTMLElement>('section[id], footer[id]')
+  const navLinksAll = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]')
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id
+          navLinksAll.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('text-white', 'font-medium')
+              link.classList.remove('text-white/50', 'text-white/60')
+            } else {
+              link.classList.remove('text-white', 'font-medium')
+              // Restore correct opacity class based on context
+              if (link.closest('#mobile-menu')) {
+                link.classList.add('text-white/60')
+              } else {
+                link.classList.add('text-white/50')
+              }
+            }
+          })
+        }
+      })
+    },
+    { threshold: 0.3, rootMargin: '-60px 0px 0px 0px' }
+  )
+
+  sections.forEach(section => observer.observe(section))
+</script>

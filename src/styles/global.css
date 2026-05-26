@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@theme {
+  --color-kai-button: #0088D2;
+  --color-kai-200: #b3e0ff;
+  --color-kai-900: #003d5c;
+  --color-kai-950: #002a3f;
+  --color-html: #FF6D00;
+  --color-primary: #0088D2;
+  --color-primary-foreground: #ffffff;
+  --color-background: #0a0a0a;
+  --color-foreground: #ffffff;
+  --color-muted: #1a1a2e;
+  --color-muted-foreground: #a0a0b0;
+  --color-card: #111122;
+  --color-border: #2a2a3e;
+  --color-popover: #1a1a2e;
+  --color-popover-foreground: #e0e0e0;
+}

@@ -1,0 +1,78 @@
+---
+import { skills, LEVEL_LABEL } from '../data/skills'
+import type { SkillLevel } from '../data/skills'
+---
+
+<section id="skills" class="py-12 opacity-0 translate-y-6 transition-all duration-500" data-reveal>
+  <div class="flex justify-center">
+    <div class="max-w-[350px] md:max-w-[450px] lg:min-w-[750px] lg:max-w-[750px] w-full">
+      <h2 class="text-2xl font-bold mb-6">👨🏼‍💻 Skills & Tecnologías</h2>
+
+      <!-- Mobile: accordion -->
+      <div class="md:hidden space-y-3">
+        {skills.map((cat, catIdx) => (
+          <div class="border border-border rounded-lg overflow-hidden">
+            <button
+              data-skill-toggle={`skill-panel-${catIdx}`}
+              class="w-full flex items-center justify-between p-4 text-left"
+            >
+              <span class="font-medium">{cat.icon} {cat.category}</span>
+              <svg data-chevron class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div id={`skill-panel-${catIdx}`} class="hidden px-4 pb-4">
+              <div class="space-y-2">
+                {cat.items.map(item => (
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm">{item.name}</span>
+                    <div class="flex gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span class:list={['h-1.5 w-1.5 rounded-full', i < item.level ? 'bg-primary' : 'bg-muted']} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Desktop: grid -->
+      <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {skills.map(cat => (
+          <div class="border border-border rounded-xl p-4 bg-card/50 hover:border-primary/30 transition-colors duration-200">
+            <h3 class="font-semibold mb-3">{cat.icon} {cat.category}</h3>
+            <div class="space-y-2">
+              {cat.items.map(item => (
+                <div class="relative group inline-flex items-center justify-between w-full">
+                  <span class="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{item.name}</span>
+                  <div class="flex gap-1 mt-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span class:list={['h-1.5 w-1.5 rounded-full', i < item.level ? 'bg-primary' : 'bg-muted']} />
+                    ))}
+                  </div>
+                  <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded bg-popover text-popover-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                    {LEVEL_LABEL[item.level as SkillLevel]}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-skill-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = (btn as HTMLElement).getAttribute('data-skill-toggle')!
+      const target = document.getElementById(targetId)
+      target?.classList.toggle('hidden')
+      btn.querySelector('[data-chevron]')?.classList.toggle('rotate-180')
+    })
+  })
+</script>

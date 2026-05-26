@@ -1,13 +1,240 @@
+---
+export interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Maximo Figuera — Fullstack Developer & LLM Engineer',
+  description = 'Portfolio de Maximo Figuera, desarrollador fullstack especializado en TypeScript, Astro y aplicaciones con LLMs.',
+} = Astro.props
+
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
+const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : null
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body class="antialiased text-white z-10 min-h-dvh bg-gradient-to-b from-sky-900 via-black to-black">
-		<slot />
-	</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Maximo Figuera" />
+    <meta name="keywords" content="developer, portfolio, TypeScript, Astro, LLM, fullstack, UX/UI, Buenos Aires" />
+    {canonicalURL && <link rel="canonical" href={canonicalURL.toString()} />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    {canonicalURL && <meta property="og:url" content={canonicalURL.toString()} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {ogImage && <meta property="og:image" content={ogImage.toString()} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage.toString()} />}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Maximo Figuera',
+      jobTitle: 'Fullstack Developer',
+      url: Astro.site?.toString() ?? '',
+      sameAs: [
+        'https://github.com/degszz',
+        'https://www.linkedin.com/in/maximo-figuera-531231323/',
+      ],
+    })} />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="antialiased text-white z-10 min-h-dvh bg-gradient-to-b from-sky-900 via-black to-black">
+
+    <!-- Scroll progress bar — fixed at bottom of header area -->
+    <div id="scroll-bar" class="fixed top-[50px] lg:top-[59px] left-0 h-[2px] z-[60] scroll-bar-gradient" style="width: 0%; opacity: 0"></div>
+
+    <!-- Custom scrollbar (right) — full height track -->
+    <div id="scrollbar-track" class="fixed right-[3px] top-[80px] bottom-[80px] w-[5px] rounded-full z-[55] opacity-0 pointer-events-none">
+      <div
+        id="scrollbar-thumb"
+        class="absolute left-0 w-full rounded-full cursor-grab scrollbar-thumb-style"
+        style="height: 50px; top: 0"
+      ></div>
+    </div>
+
+    <slot />
+
+    <style is:global>
+      /* Hide native scrollbar */
+      html {
+        scrollbar-width: none;
+      }
+      html::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ─── Header scroll state ─── */
+      .nav-scrolled {
+        background: rgba(8, 47, 73, 0.55);
+        backdrop-filter: blur(16px) saturate(1.4);
+        -webkit-backdrop-filter: blur(16px) saturate(1.4);
+        box-shadow: 0 1px 0 rgba(56, 189, 248, 0.08), 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* ─── Scroll progress bar (under header) ─── */
+      .scroll-bar-gradient {
+        background: linear-gradient(90deg, #0ea5e9, #38bdf8, #7dd3fc, #38bdf8, #0ea5e9);
+        background-size: 200% 100%;
+        animation: shimmer 3s ease-in-out infinite;
+        border-radius: 0 2px 2px 0;
+        transition: opacity 0.4s ease, width 0.05s linear;
+      }
+
+      @keyframes shimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+
+      /* ─── Custom scrollbar ─── */
+      #scrollbar-track {
+        transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      #scrollbar-track.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .scrollbar-thumb-style {
+        background: linear-gradient(180deg, #38bdf8, #0ea5e9);
+        box-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.25s ease-out;
+      }
+
+      .scrollbar-thumb-style:hover {
+        transform: scaleX(1.6);
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.5), 0 0 24px rgba(56, 189, 248, 0.15);
+      }
+
+      .scrollbar-thumb-style.dragging {
+        transform: scaleX(1.8) scaleY(1.05);
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.7), 0 0 32px rgba(56, 189, 248, 0.25);
+        cursor: grabbing;
+      }
+
+      /* Spring-in animation for thumb */
+      @keyframes thumb-spring {
+        0% { opacity: 0; transform: scaleY(0.3) scaleX(0.5); }
+        60% { opacity: 1; transform: scaleY(1.15) scaleX(1.05); }
+        80% { transform: scaleY(0.95) scaleX(0.98); }
+        100% { transform: scaleY(1) scaleX(1); }
+      }
+
+      #scrollbar-track.spring-in .scrollbar-thumb-style {
+        animation: thumb-spring 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+    </style>
+
+    <script>
+      // ─── Scroll reveal ───
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const revealObserver = new IntersectionObserver(
+          (entries) => entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.remove('opacity-0', 'translate-y-6')
+              revealObserver.unobserve(e.target)
+            }
+          }),
+          { threshold: 0.1 }
+        )
+        document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el))
+      }
+
+      // ─── Scroll progress bar (under header) ───
+      const scrollBar = document.getElementById('scroll-bar')!
+
+      // ─── Custom scrollbar (right side, top to bottom) ───
+      const track = document.getElementById('scrollbar-track')!
+      const thumb = document.getElementById('scrollbar-thumb')!
+      let hideTimer: ReturnType<typeof setTimeout>
+      let isDragging = false
+      let dragStartY = 0
+      let dragStartTop = 0
+
+      function getScrollPercent() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight
+        return docHeight > 0 ? window.scrollY / docHeight : 0
+      }
+
+      function updateScrollUI() {
+        const pct = getScrollPercent()
+
+        // Progress bar — always visible once scrolled, width = scroll %
+        scrollBar.style.width = `${pct * 100}%`
+        scrollBar.style.opacity = pct > 0 ? '1' : '0'
+
+        // Scrollbar thumb position within full-height track
+        const trackH = track.clientHeight
+        const thumbH = thumb.clientHeight
+        const maxTop = trackH - thumbH
+        thumb.style.top = `${pct * maxTop}px`
+      }
+
+      function showScrollbar() {
+        track.classList.add('visible', 'spring-in')
+        clearTimeout(hideTimer)
+        hideTimer = setTimeout(() => {
+          if (!isDragging) {
+            track.classList.remove('visible')
+            setTimeout(() => track.classList.remove('spring-in'), 400)
+          }
+        }, 1200)
+      }
+
+      window.addEventListener('scroll', () => {
+        updateScrollUI()
+        showScrollbar()
+      }, { passive: true })
+
+      // Thumb drag
+      thumb.addEventListener('mousedown', (e) => {
+        isDragging = true
+        dragStartY = e.clientY
+        dragStartTop = parseInt(thumb.style.top || '0')
+        thumb.classList.add('dragging')
+        document.body.style.userSelect = 'none'
+        e.preventDefault()
+      })
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return
+        const deltaY = e.clientY - dragStartY
+        const trackH = track.clientHeight
+        const thumbH = thumb.clientHeight
+        const maxTop = trackH - thumbH
+        const newTop = Math.max(0, Math.min(maxTop, dragStartTop + deltaY))
+        const pct = maxTop > 0 ? newTop / maxTop : 0
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight
+        window.scrollTo(0, pct * docHeight)
+      })
+
+      window.addEventListener('mouseup', () => {
+        if (!isDragging) return
+        isDragging = false
+        thumb.classList.remove('dragging')
+        document.body.style.userSelect = ''
+        showScrollbar()
+      })
+
+      // Initial state
+      updateScrollUI()
+    </script>
+  </body>
 </html>

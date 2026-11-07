@@ -8,7 +8,10 @@ export type Certificate = {
   category: CertCategory
   verifyUrl?: string
   image?: string
+  images?: string[]
 }
+
+const AI_ICONS = ['/icons-claude.svg', '/icons-ai.svg', '/icons-robot.svg']
 
 export const certificates: Certificate[] = [
   {
@@ -98,7 +101,7 @@ export const certificates: Certificate[] = [
     date: '2026',
     category: 'AI',
     verifyUrl: 'https://certificados.midudev.com/862fb69f-094f-4e1f-b243-3271b5640a6b.pdf',
-    image: '/icons-ai.svg',
+    images: AI_ICONS,
   },
   {
     id: 'cert-desarrollo-web-ia',
@@ -107,7 +110,7 @@ export const certificates: Certificate[] = [
     date: '2026',
     category: 'AI',
     verifyUrl: 'https://certificados.midudev.com/3db72e6e-95e9-41e4-9469-24d5e9d758ef.pdf',
-    image: '/icons-ai.svg',
+    images: AI_ICONS,
   },
   {
     id: 'cert-utility-types-ts',

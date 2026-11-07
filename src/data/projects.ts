@@ -1,4 +1,4 @@
-export type ProjectCategory = 'AI/LLM' | 'Frontend' | 'Backend' | 'Fullstack'
+export type ProjectCategory = 'AI/LLM' | 'Frontend' | 'Backend' | 'Fullstack' | 'Mobile'
 
 export type Project = {
   id: string
@@ -14,6 +14,28 @@ export type Project = {
 }
 
 export const projects: Project[] = [
+  {
+    id: 'almacen-pos',
+    title: 'Caja para Almacén',
+    tagline: 'Punto de venta con stock, precios y reportes',
+    stack: ['Flutter', 'Dart', 'Flutter Web'],
+    category: 'Mobile',
+    challenge: 'App de caja registradora para almacenes y supermercados, en producción para un cliente. Permite escanear o buscar productos (con atajo "3*código" para cargar cantidades), cobrar, controlar el stock, actualizar precios y ver reportes de ventas. Esta es una demo web con datos de ejemplo: los cambios se borran al recargar.',
+    liveUrl: 'https://almacen-pos-demo.vercel.app',
+    repoUrl: null,
+    image: '/icons-pos.svg',
+  },
+  {
+    id: 'inmobiliaria-alquileres',
+    title: 'Gestión de Alquileres',
+    tagline: 'App para inmobiliarias: contratos, recibos y cobros',
+    stack: ['Flutter', 'Dart', 'Flutter Web'],
+    category: 'Mobile',
+    challenge: 'App de gestión para una inmobiliaria, en producción para un cliente. Centraliza contratos, propiedades, propietarios, inquilinos y garantes; emite recibos, avisa los vencimientos de los próximos 7 días, lleva el control de recibos pendientes y genera reportes. Esta es una demo web con datos de ejemplo: los cambios se borran al recargar.',
+    liveUrl: 'https://inmobiliaria-demo-wine.vercel.app',
+    repoUrl: null,
+    image: '/icons-realestate.svg',
+  },
 
   {
     id: 'mandados-ahora',
@@ -49,26 +71,15 @@ export const projects: Project[] = [
     image: '/logo-barrio.png',
   },
   {
-    id: 'water-web',
-    title: 'Water Web',
-    tagline: 'Web para pedir agua a domicilio con WhatsApp API',
-    stack: ['HTML', 'CSS', 'JavaScript', 'WhatsApp API'],
+    id: 'componhex',
+    title: 'Componhex',
+    tagline: 'Design system open source para copiar y pegar',
+    stack: ['Tailwind CSS', 'Astro', 'HTML', 'Zero dependencias'],
     category: 'Frontend',
-    challenge: 'Integrating WhatsApp Business API for automated messaging and order management.',
-    liveUrl: 'https://polite-figolla-9c03dc.netlify.app/',
+    challenge: 'Librería de 29 componentes (botones, cards, badges, avatares, toggles, tooltips y más), cada uno en 3 estilos distintos: Minimal, Cartoon 3D y Neo Glass. Sin dependencias: se copia el código en HTML, JSX o Astro y se pega en cualquier proyecto. Reemplaza a mi Design System anterior.',
+    liveUrl: 'https://compohex.vercel.app',
     repoUrl: null,
-    image: '/water.avif',
-  },
-  {
-    id: 'design-system',
-    title: 'Design System',
-    tagline: '+8 reusable components for consistent UI',
-    stack: ['React', 'TypeScript', 'Tailwind CSS', 'Storybook'],
-    category: 'Frontend',
-    challenge: 'Building a component library with consistent APIs and accessibility across all variants.',
-    liveUrl: 'https://helpful-basbousa-eca252.netlify.app/',
-    repoUrl: null,
-    image: '/puzzle.avif',
+    image: '/icons-componhex.svg',
   },
   {
     id: 'web-food',
